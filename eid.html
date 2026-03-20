@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eid Mubarak ✨</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Great+Vibes&display=swap');
+
+body {
+    font-family: system-ui;
+    overflow: hidden;
+}
+
+/* BACKGROUND */
+.bg-animation {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+}
+
+/* MOON */
+.moon {
+    position: absolute;
+    top: 10%;
+    left: 15%;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, #fde68a, transparent 70%);
+    border-radius: 50%;
+    filter: blur(20px);
+    animation: moonMove 6s infinite alternate;
+}
+@keyframes moonMove {
+    to { transform: translateY(30px); }
+}
+
+/* STARS */
+.stars::before {
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    box-shadow: 100px 200px white, 300px 400px white, 500px 100px white,
+                700px 300px white, 900px 200px white;
+    animation: twinkle 2s infinite alternate;
+}
+@keyframes twinkle {
+    to { opacity: 0.3; }
+}
+
+/* PARTICLES */
+.particles span {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: gold;
+    border-radius: 50%;
+    animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+    from { transform: translateY(100vh); opacity: 0; }
+    to { transform: translateY(-10vh); opacity: 1; }
+}
+
+/* LANTERNS */
+.lanterns span {
+    position: absolute;
+    width: 20px;
+    height: 30px;
+    background: orange;
+    border-radius: 5px;
+    box-shadow: 0 0 20px gold;
+    animation: floatLantern linear infinite;
+}
+@keyframes floatLantern {
+    from { transform: translateY(100vh); }
+    to { transform: translateY(-20vh); }
+}
+
+/* TEXT */
+.name-text {
+    font-family: 'Playfair Display';
+    text-shadow: 0 0 10px gold, 0 0 20px #10b981;
+}
+
+.wish-text {
+    font-family: 'Great Vibes';
+    text-shadow: 0 0 10px white, 0 0 20px gold;
+}
+</style>
+</head>
+
+<body class="bg-gradient-to-br from-black via-emerald-950 to-black text-white">
+
+<!-- BACKGROUND -->
+<div class="bg-animation">
+    <div class="moon"></div>
+    <div class="stars"></div>
+    <div class="particles"></div>
+    <div class="lanterns"></div>
+</div>
+
+<!-- INPUT SCREEN -->
+<div id="input-screen" class="min-h-screen flex items-center justify-center p-6">
+    <div class="text-center">
+        <h1 class="text-5xl mb-6">EID MUBARAK</h1>
+
+        <input id="name-input" placeholder="Naam likho"
+            class="p-4 text-black rounded-xl text-xl text-center">
+
+        <br><br>
+
+        <button onclick="generateWish()"
+            class="bg-green-500 px-6 py-3 rounded-xl active:scale-95">
+            ✨ Wish Dikhao
+        </button>
+    </div>
+</div>
+
+<!-- WISH SCREEN -->
+<div id="wish-screen" class="hidden min-h-screen flex flex-col items-center justify-center">
+
+    <!-- CARD FIXED -->
+    <div id="card" class="relative w-80 h-[500px] rounded-3xl border-4 border-yellow-400 overflow-hidden">
+
+        <!-- IMAGE FIX -->
+        <img src="https://i.postimg.cc/cJtkdLmK/file-0000000052f871fa89d5e372e858eb33.png"
+             crossorigin="anonymous"
+             class="absolute inset-0 w-full h-full object-cover">
+
+        <!-- OVERLAY -->
+        <div class="absolute inset-0 bg-black/40"></div>
+
+        <!-- CONTENT -->
+        <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
+
+            <h2 class="text-3xl mb-4">EID MUBARAK</h2>
+
+            <div id="display-name" class="name-text text-4xl mb-3"></div>
+
+            <div class="wish-text text-2xl leading-snug">
+                Wishing You A<br>Joyous & Blessed Eid
+            </div>
+
+        </div>
+    </div>
+
+    <button onclick="downloadCard()"
+        class="mt-6 bg-green-600 px-6 py-3 rounded-xl active:scale-95">
+        📥 Download
+    </button>
+
+    <button onclick="goBack()" class="mt-3 text-yellow-300">
+        ← Back
+    </button>
+
+</div>
+
+<script>
+let currentName = "";
+
+// GENERATE
+function generateWish() {
+    const name = document.getElementById("name-input").value;
+    if (!name) return alert("Naam daalo!");
+
+    currentName = name;
+    document.getElementById("display-name").innerText = name;
+
+    document.getElementById("input-screen").classList.add("hidden");
+    document.getElementById("wish-screen").classList.remove("hidden");
+}
+
+// DOWNLOAD FIXED
+async function downloadCard() {
+    const card = document.getElementById("card");
+
+    const canvas = await html2canvas(card, {
+        scale: 3,
+        useCORS: true,
+        allowTaint: false,
+        backgroundColor: null
+    });
+
+    const link = document.createElement("a");
+    link.download = currentName + "-Eid.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+}
+
+// BACK
+function goBack() {
+    document.getElementById("wish-screen").classList.add("hidden");
+    document.getElementById("input-screen").classList.remove("hidden");
+}
+
+// PARTICLES
+for (let i = 0; i < 40; i++) {
+    let p = document.createElement("span");
+    p.style.left = Math.random()*100+"vw";
+    p.style.animationDuration = (3+Math.random()*5)+"s";
+    document.querySelector(".particles").appendChild(p);
+}
+
+// LANTERNS
+for (let i = 0; i < 8; i++) {
+    let l = document.createElement("span");
+    l.style.left = Math.random()*100+"vw";
+    l.style.animationDuration = (5+Math.random()*5)+"s";
+    document.querySelector(".lanterns").appendChild(l);
+}
+</script>
+
+</body>
+</html>
